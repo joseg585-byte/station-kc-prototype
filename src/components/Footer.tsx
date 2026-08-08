@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Music2 } from "lucide-react";
 import { brand } from "@/data/brand";
 import { locations } from "@/data/locations";
@@ -36,13 +37,14 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-md bg-amber text-ink font-display font-black text-lg">
-                S
-              </span>
-              <span className="font-display text-xl font-black lowercase text-cream">
-                {brand.displayName}
-              </span>
+            <div className="flex items-center rounded-lg bg-cream/95 p-1.5 w-fit">
+              <Image
+                src="/images/brand/station-logo.png"
+                alt={brand.displayName}
+                width={1806}
+                height={800}
+                className="h-9 w-auto"
+              />
             </div>
             <p className="mt-4 max-w-xs text-sm text-cream/70">
               {brand.subtagline}
@@ -93,7 +95,7 @@ export default function Footer() {
               <li><Link href="/menu" className="text-cream/80 hover:text-amber">Full Menu</Link></li>
               <li><Link href="/menu?category=liquor" className="text-cream/80 hover:text-amber">Cutter &amp; Cork Liquor</Link></li>
               <li><Link href="/gift-cards" className="text-cream/80 hover:text-amber">Gift Cards</Link></li>
-              <li><a href={brand.rewardsUrl} target="_blank" rel="noreferrer" className="text-cream/80 hover:text-amber">Station Rewards</a></li>
+              <li><Link href="/rewards" className="text-cream/80 hover:text-amber">Station Rewards</Link></li>
             </ul>
           </div>
 
@@ -113,6 +115,8 @@ export default function Footer() {
           <div>
             <h3 className="overline text-cream/50">Company</h3>
             <ul className="mt-4 space-y-2.5 text-sm">
+              <li><Link href="/careers" className="text-cream/80 hover:text-amber">Careers</Link></li>
+              <li><Link href="/sweepstakes" className="text-cream/80 hover:text-amber">Sweepstakes</Link></li>
               <li><Link href="/account" className="text-cream/80 hover:text-amber">My Account</Link></li>
               <li><a href="https://dibellasfood.com/" target="_blank" rel="noreferrer" className="text-cream/80 hover:text-amber">Di Bella&apos;s Grill &amp; Pizza</a></li>
             </ul>

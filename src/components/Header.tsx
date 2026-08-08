@@ -1,20 +1,101 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Menu, X, ShoppingBag, User } from "lucide-react";
+import { Menu, X, ShoppingBag, User, ChevronDown } from "lucide-react";
 import { useCart } from "@/lib/store";
 import { brand } from "@/data/brand";
 
-const NAV_LINKS = [
-  { href: "/menu", label: "Menu" },
-  { href: "/locations", label: "Locations" },
-  { href: "/gift-cards", label: "Gift Cards" },
+// Mirrors the nav structure + ordering at thestationkc.com (Aug 2026):
+// Home, Fuel, Food ▾, Liquor, Careers, Station Rewards, Order ▾, Locations ▾, Sweepstakes.
+type NavLink = { href: string; label: string; external?: boolean };
+type NavItem = { label: string; href?: string; children?: NavLink[] };
+
+const NAV_ITEMS: NavItem[] = [
+  { label: "Home", href: "/" },
+  { label: "Fuel", href: "/fuel" },
+  {
+    label: "Food",
+    children: [
+      { href: "/menu?category=donuts", label: "Di Bella's Donuts & More" },
+      { href: "https://dibellasfood.com/", label: "Di Bella's Grill & Pizza", external: true },
+    ],
+  },
+  { label: "Liquor", href: "/menu?category=liquor" },
+  { label: "Careers", href: "/careers" },
+  { label: "Station Rewards", href: "/rewards" },
+  {
+    label: "Order",
+    children: [
+      { href: "/menu", label: "Pickup Order" },
+      { href: "/gift-cards", label: "Gift Cards" },
+    ],
+  },
+  {
+    label: "Locations",
+    children: [
+      { href: "/locations/brink-meyer", label: "1. Brink Meyer" },
+      { href: "/locations/brighton", label: "2. Brighton" },
+      { href: "/locations/stark", label: "3. Stark" },
+      { href: "/locations/homer", label: "4. Homer" },
+    ],
+  },
+  { label: "Sweepstakes", href: "/sweepstakes" },
 ];
+
+function NavDropdown({ item, active }: { item: NavItem; active: boolean }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      <button
+        className={`focus-ring flex items-center gap-1 rounded-md text-sm font-semibold uppercase tracking-wide transition-colors hover:text-green ${
+          active ? "text-green" : "text-ink-soft"
+        }`}
+        aria-expanded={hover}
+      >
+        {item.label}
+        <ChevronDown className="h-3.5 w-3.5" />
+      </button>
+      {hover && (
+        <div className="absolute left-1/2 top-full z-50 min-w-[220px] -translate-x-1/2 pt-2">
+          <div className="overflow-hidden rounded-xl border border-green-ink/10 bg-paper py-1.5 shadow-lift">
+            {item.children!.map((c) =>
+              c.external ? (
+                <a
+                  key={c.href}
+                  href={c.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block px-4 py-2 text-sm font-medium text-ink-soft hover:bg-cream-deep hover:text-green"
+                >
+                  {c.label}
+                </a>
+              ) : (
+                <Link
+                  key={c.href}
+                  href={c.href}
+                  className="block px-4 py-2 text-sm font-medium text-ink-soft hover:bg-cream-deep hover:text-green"
+                >
+                  {c.label}
+                </Link>
+              )
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [mobileGroupOpen, setMobileGroupOpen] = useState<string | null>(null);
   const pathname = usePathname();
   const lines = useCart((s) => s.lines);
   const toggleCart = useCart((s) => s.toggle);
@@ -23,27 +104,39 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-green-ink/10 bg-paper/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-green text-cream font-display font-black text-lg">
-            S
-          </span>
-          <span className="font-display text-xl font-black tracking-tight text-ink lowercase">
-            {brand.displayName}
-          </span>
+        <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
+          <Image
+            src="/images/brand/station-logo.png"
+            alt={brand.displayName}
+            width={1806}
+            height={800}
+            priority
+            className="h-11 w-auto sm:h-12"
+          />
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`text-sm font-semibold uppercase tracking-wide transition-colors hover:text-green ${
-                pathname?.startsWith(link.href) ? "text-green" : "text-ink-soft"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-6 lg:flex">
+          {NAV_ITEMS.map((item) =>
+            item.children ? (
+              <NavDropdown
+                key={item.label}
+                item={item}
+                active={item.children.some((c) => !c.external && pathname?.startsWith(c.href.split("?")[0]))}
+              />
+            ) : (
+              <Link
+                key={item.href}
+                href={item.href!}
+                className={`text-sm font-semibold uppercase tracking-wide transition-colors hover:text-green ${
+                  (item.href === "/" ? pathname === "/" : pathname?.startsWith(item.href!))
+                    ? "text-green"
+                    : "text-ink-soft"
+                }`}
+              >
+                {item.label}
+              </Link>
+            )
+          )}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -68,7 +161,7 @@ export default function Header() {
           </button>
           <button
             onClick={() => setOpen((v) => !v)}
-            className="focus-ring rounded-full p-2 text-ink-soft hover:bg-cream-deep md:hidden"
+            className="focus-ring rounded-full p-2 text-ink-soft hover:bg-cream-deep lg:hidden"
             aria-label="Toggle menu"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -77,19 +170,73 @@ export default function Header() {
       </div>
 
       {open && (
-        <nav className="border-t border-green-ink/10 bg-paper px-4 py-3 md:hidden">
+        <nav className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-green-ink/10 bg-paper px-4 py-3 lg:hidden">
           <ul className="flex flex-col gap-1">
-            {[...NAV_LINKS, { href: "/account", label: "Account" }].map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="block rounded-lg px-3 py-2.5 text-sm font-semibold uppercase tracking-wide text-ink-soft hover:bg-cream-deep hover:text-green"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
+            {NAV_ITEMS.map((item) =>
+              item.children ? (
+                <li key={item.label}>
+                  <button
+                    onClick={() =>
+                      setMobileGroupOpen((g) => (g === item.label ? null : item.label))
+                    }
+                    className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-semibold uppercase tracking-wide text-ink-soft hover:bg-cream-deep hover:text-green"
+                    aria-expanded={mobileGroupOpen === item.label}
+                  >
+                    {item.label}
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform ${
+                        mobileGroupOpen === item.label ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {mobileGroupOpen === item.label && (
+                    <ul className="ml-3 flex flex-col gap-0.5 border-l border-green-ink/10 pl-3">
+                      {item.children.map((c) => (
+                        <li key={c.href}>
+                          {c.external ? (
+                            <a
+                              href={c.href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="block rounded-lg px-3 py-2 text-sm font-medium text-ink-soft hover:bg-cream-deep hover:text-green"
+                            >
+                              {c.label}
+                            </a>
+                          ) : (
+                            <Link
+                              href={c.href}
+                              onClick={() => setOpen(false)}
+                              className="block rounded-lg px-3 py-2 text-sm font-medium text-ink-soft hover:bg-cream-deep hover:text-green"
+                            >
+                              {c.label}
+                            </Link>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ) : (
+                <li key={item.href}>
+                  <Link
+                    href={item.href!}
+                    onClick={() => setOpen(false)}
+                    className="block rounded-lg px-3 py-2.5 text-sm font-semibold uppercase tracking-wide text-ink-soft hover:bg-cream-deep hover:text-green"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              )
+            )}
+            <li>
+              <Link
+                href="/account"
+                onClick={() => setOpen(false)}
+                className="block rounded-lg px-3 py-2.5 text-sm font-semibold uppercase tracking-wide text-ink-soft hover:bg-cream-deep hover:text-green"
+              >
+                Account
+              </Link>
+            </li>
           </ul>
         </nav>
       )}
