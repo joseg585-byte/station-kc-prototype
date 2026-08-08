@@ -20,6 +20,15 @@ export type PickupOrder = {
   customerName?: string;
 };
 
+export type PendingGiftCard = {
+  id: string;
+  amount: number;
+  purchaserEmail: string;
+  recipientEmail: string;
+  recipientName?: string;
+  message?: string;
+};
+
 export type GiftCard = {
   code: string;
   amount: number;
