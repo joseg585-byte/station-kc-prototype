@@ -39,11 +39,13 @@ export default function FuelPage() {
           <div className="flex items-start gap-3 rounded-2xl border border-green-ink/10 bg-cream p-6">
             <CreditCard className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-deep" />
             <p className="text-sm text-ink-soft">
-              All pumps are open 24 hours using a credit or debit card. Every
-              location carries Unleaded, Unleaded Plus, Premium, and Diesel,
-              plus DEF, anti-freeze/coolant, brake fluid, and motor oil.
-              Brink Meyer &amp; Stark also carry No Ethanol Premium, Brighton
-              carries E85, and Homer carries Off-Road Diesel.
+              All pumps are 24 hours using a credit or debit card. All stores
+              currently carry Unleaded, Unleaded Plus, Premium, and Diesel.
+              Brink Meyer Rd &amp; Stark Ave also carry No Ethanol Premium,
+              Brighton also carries E85, and Homer Pkwy also carries Off-Road
+              Diesel. All locations sell DEF as well as anti-freeze/coolant,
+              brake fluid, many types of oil, and several other items for
+              your car for your convenience.
             </p>
           </div>
 
