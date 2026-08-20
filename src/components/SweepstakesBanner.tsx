@@ -8,12 +8,17 @@ const DISMISS_KEY = "thestation-sweeps-banner-dismissed";
 
 // Bright, dismissible acquisition banner above the hero — mirrors the real
 // site's #1 conversion play. Remembers dismissal in localStorage.
+//
+// Defaults to visible (server has no localStorage to check) and only hides
+// itself post-hydration if the visitor already dismissed it — so the banner
+// still shows up in server-rendered/no-JS HTML instead of only appearing
+// after client-side state settles.
 export default function SweepstakesBanner() {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    if (localStorage.getItem(DISMISS_KEY) !== "1") {
-      setVisible(true);
+    if (localStorage.getItem(DISMISS_KEY) === "1") {
+      setVisible(false);
     }
   }, []);
 
