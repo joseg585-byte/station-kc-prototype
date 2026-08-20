@@ -46,6 +46,7 @@ export default function TabBar() {
           <Link
             key={tab.href}
             href={tab.href}
+            aria-current={active ? "page" : undefined}
             className={`focus-ring flex flex-1 flex-col items-center justify-center gap-0.5 text-[11px] font-bold uppercase tracking-wide transition-colors active:scale-95 ${
               active ? "text-green-deep" : "text-ink-soft/70"
             }`}
@@ -67,7 +68,10 @@ export default function TabBar() {
         >
           <ShoppingBag className="h-5 w-5" />
           {itemCount > 0 && (
-            <span className="absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber text-[10px] font-bold text-ink">
+            <span
+              key={itemCount}
+              className="badge-pop absolute -right-2 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber text-[10px] font-bold text-ink"
+            >
               {itemCount}
             </span>
           )}

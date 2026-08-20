@@ -136,6 +136,11 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href!}
+                aria-current={
+                  (item.href === "/" ? pathname === "/" : pathname?.startsWith(item.href!))
+                    ? "page"
+                    : undefined
+                }
                 className={`text-sm font-semibold uppercase tracking-wide transition-colors hover:text-green ${
                   (item.href === "/" ? pathname === "/" : pathname?.startsWith(item.href!))
                     ? "text-green"
@@ -163,7 +168,10 @@ export default function Header() {
           >
             <ShoppingBag className="h-5 w-5" />
             {itemCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-amber text-[11px] font-bold text-ink">
+              <span
+                key={itemCount}
+                className="badge-pop absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-amber text-[11px] font-bold text-ink"
+              >
                 {itemCount}
               </span>
             )}
@@ -179,11 +187,14 @@ export default function Header() {
       </div>
 
       {/* Sticky mobile store selector — "app home screen" pattern, hidden on
-          desktop where the top nav + Locations dropdown already cover this. */}
+          desktop where the top nav + Locations dropdown already cover this.
+          Fixed height (not implicit padding+text) so it can't vary in size
+          and shift <main> on hydration. */}
       <div className="relative border-t border-green-ink/10 bg-cream-deep/70 lg:hidden">
         <button
           onClick={() => setStorePickerOpen((v) => !v)}
-          className="focus-ring flex w-full items-center justify-between gap-2 px-4 py-2 text-xs font-semibold text-ink-soft"
+          className="focus-ring flex w-full items-center justify-between gap-2 px-4 text-xs font-semibold text-ink-soft"
+          style={{ height: "var(--store-row-h)" }}
           aria-expanded={storePickerOpen}
         >
           <span className="flex min-w-0 items-center gap-1.5 truncate">
