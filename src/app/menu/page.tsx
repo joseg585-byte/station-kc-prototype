@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MenuExplorer from "@/components/MenuExplorer";
+import MenuSkeleton from "@/components/skeletons/MenuSkeleton";
 
 export const metadata: Metadata = {
   title: "Menu — the station",
@@ -30,7 +31,7 @@ export default function MenuPage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          <Suspense fallback={<div className="py-24 text-center text-ink-soft">Loading menu…</div>}>
+          <Suspense fallback={<MenuSkeleton />}>
             <MenuExplorer />
           </Suspense>
         </section>

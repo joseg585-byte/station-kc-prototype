@@ -3,6 +3,7 @@ import { Archivo, Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import GlobalProviders from "@/components/GlobalProviders";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+import PageTransition from "@/components/PageTransition";
 
 // Bold, condensed display font for headlines — highway-signage energy.
 const archivo = Archivo({
@@ -66,7 +67,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${archivo.variable} ${inter.variable} ${bebasNeue.variable} h-full antialiased`}>
       <body className="min-h-full bg-paper text-ink">
-        {children}
+        <PageTransition>{children}</PageTransition>
         <GlobalProviders />
         <ServiceWorkerRegister />
       </body>

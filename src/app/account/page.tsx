@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { LogOut, Gift, Receipt, MapPin, User } from "lucide-react";
+import { LogOut, Gift, Receipt, MapPin, User, Package } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/lib/auth";
@@ -11,11 +11,23 @@ import { listGiftCardsFor } from "@/lib/giftCards";
 import { getLocation } from "@/data/locations";
 import { formatCurrency } from "@/lib/format";
 import type { PickupOrder, GiftCard } from "@/lib/types";
+import AccountSkeleton from "@/components/skeletons/AccountSkeleton";
 
 export default function AccountPage() {
   const profile = useAuth((s) => s.profile);
   const openModal = useAuth((s) => s.openModal);
   const logout = useAuth((s) => s.logout);
+
+  // The auth store persists to localStorage and rehydrates client-side
+  // after mount — without this guard, a returning signed-in visitor sees a
+  // flash of "Sign in to your account" before their profile loads in.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    // One-time flip once the client has mounted and the persisted store
+    // has rehydrated — not a cascading state sync.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setHydrated(true);
+  }, []);
 
   const orders: PickupOrder[] = useMemo(
     () => (profile ? listOrdersFor(profile.email) : []),
@@ -25,6 +37,16 @@ export default function AccountPage() {
     () => (profile ? listGiftCardsFor(profile.email) : []),
     [profile]
   );
+
+  if (!hydrated) {
+    return (
+      <>
+        <Header />
+        <AccountSkeleton />
+        <Footer />
+      </>
+    );
+  }
 
   if (!profile) {
     return (
@@ -102,13 +124,21 @@ export default function AccountPage() {
             <h2 className="font-display text-lg font-bold text-ink">Order History</h2>
           </div>
           {orders.length === 0 ? (
-            <p className="mt-3 text-sm text-ink-soft/70">
-              No orders yet.{" "}
-              <Link href="/menu" className="font-semibold text-green-deep underline">
-                Browse the menu
+            <div className="mt-4 flex flex-col items-center rounded-2xl border border-dashed border-green-ink/15 bg-cream/50 px-6 py-10 text-center">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-green/10 text-green-deep">
+                <Package className="h-6 w-6" />
+              </span>
+              <p className="mt-4 font-semibold text-ink">No orders yet</p>
+              <p className="mt-1 max-w-xs text-sm text-ink-soft/70">
+                Your first pickup is one tap away.
+              </p>
+              <Link
+                href="/menu"
+                className="focus-ring mt-5 inline-flex items-center gap-2 rounded-full bg-green px-6 py-2.5 text-sm font-bold uppercase tracking-wide text-cream shadow-soft transition-transform hover:scale-[1.02] active:scale-95"
+              >
+                Browse the Menu
               </Link>
-              .
-            </p>
+            </div>
           ) : (
             <ul className="mt-4 space-y-3">
               {orders.map((o) => {

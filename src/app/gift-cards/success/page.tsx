@@ -10,6 +10,7 @@ import { takePendingGiftCard } from "@/lib/pendingGiftCards";
 import { generateGiftCardCode, saveGiftCard } from "@/lib/giftCards";
 import { formatCurrency } from "@/lib/format";
 import type { GiftCard } from "@/lib/types";
+import OrderSkeleton from "@/components/skeletons/OrderSkeleton";
 
 function SuccessContent() {
   const params = useSearchParams();
@@ -121,7 +122,7 @@ export default function GiftCardSuccessPage() {
   return (
     <>
       <Header />
-      <Suspense fallback={<div className="py-24 text-center text-ink-soft">Loading…</div>}>
+      <Suspense fallback={<OrderSkeleton label="Wrapping up your gift card…" />}>
         <SuccessContent />
       </Suspense>
       <Footer />

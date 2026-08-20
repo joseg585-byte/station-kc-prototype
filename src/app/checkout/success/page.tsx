@@ -12,6 +12,7 @@ import { useCart } from "@/lib/store";
 import { getLocation } from "@/data/locations";
 import { formatCurrency } from "@/lib/format";
 import type { PickupOrder } from "@/lib/types";
+import OrderSkeleton from "@/components/skeletons/OrderSkeleton";
 
 function SuccessContent() {
   const params = useSearchParams();
@@ -100,7 +101,7 @@ export default function CheckoutSuccessPage() {
   return (
     <>
       <Header />
-      <Suspense fallback={<div className="py-24 text-center text-ink-soft">Loading…</div>}>
+      <Suspense fallback={<OrderSkeleton label="Confirming your order…" />}>
         <SuccessContent />
       </Suspense>
       <Footer />
