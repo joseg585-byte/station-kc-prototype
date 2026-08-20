@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { MapPin, Phone, Clock, Fuel, ArrowRight, Navigation } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import OrderFromStationButton from "@/components/OrderFromStationButton";
 import { locations, getLocation } from "@/data/locations";
 import { formatCurrency, formatPhoneHref } from "@/lib/format";
 
@@ -50,7 +51,7 @@ export default async function LocationPage({
             <span className="rounded-full bg-amber px-3 py-1 text-xs font-bold uppercase tracking-wide text-ink">
               Station #{loc.number}
             </span>
-            <h1 className="mt-3 font-display text-4xl font-black tracking-tight text-cream sm:text-5xl">
+            <h1 className="mt-3 font-display-impact text-5xl tracking-tight text-cream sm:text-6xl">
               {loc.city}
             </h1>
             <p className="mt-2 text-cream/85">{loc.address}, {loc.city}, {loc.state} {loc.zip}</p>
@@ -143,14 +144,20 @@ export default async function LocationPage({
                   </li>
                 )}
               </ul>
-              <a
-                href={directionsUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="focus-ring mt-6 flex items-center justify-center gap-2 rounded-full border-2 border-green px-5 py-3 text-sm font-bold uppercase tracking-wide text-green-deep transition-colors hover:bg-green hover:text-cream"
-              >
-                <Navigation className="h-4 w-4" /> Get Directions
-              </a>
+              <div className="mt-6 flex flex-col gap-3">
+                <OrderFromStationButton
+                  slug={loc.slug}
+                  className="focus-ring flex items-center justify-center gap-2 rounded-full bg-green px-5 py-3 text-sm font-bold uppercase tracking-wide text-cream shadow-soft transition-transform hover:scale-[1.02] active:scale-95"
+                />
+                <a
+                  href={directionsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="focus-ring flex items-center justify-center gap-2 rounded-full border-2 border-green px-5 py-3 text-sm font-bold uppercase tracking-wide text-green-deep transition-colors hover:bg-green hover:text-cream active:scale-95"
+                >
+                  <Navigation className="h-4 w-4" /> Get Directions
+                </a>
+              </div>
             </aside>
           </div>
         </section>
