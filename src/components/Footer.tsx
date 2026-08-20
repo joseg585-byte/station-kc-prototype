@@ -119,6 +119,10 @@ export default function Footer() {
               <li><Link href="/sweepstakes" className="text-cream/80 hover:text-amber">Sweepstakes</Link></li>
               <li><Link href="/account" className="text-cream/80 hover:text-amber">My Account</Link></li>
               <li><a href="https://dibellasfood.com/" target="_blank" rel="noreferrer" className="text-cream/80 hover:text-amber">Di Bella&apos;s Grill &amp; Pizza</a></li>
+              <li><Link href="/help" className="text-cream/80 hover:text-amber">Help / Support</Link></li>
+              <li><Link href="/privacy" className="text-cream/80 hover:text-amber">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="text-cream/80 hover:text-amber">Terms of Service</Link></li>
+              <li><Link href="/accessibility" className="text-cream/80 hover:text-amber">Accessibility Statement</Link></li>
             </ul>
           </div>
         </div>
