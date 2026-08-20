@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Inter } from "next/font/google";
+import { Archivo, Inter, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import GlobalProviders from "@/components/GlobalProviders";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
@@ -9,6 +9,15 @@ const archivo = Archivo({
   variable: "--font-archivo",
   subsets: ["latin"],
   weight: ["600", "700", "800", "900"],
+  display: "swap",
+});
+
+// Extra-heavy, all-caps display face reserved for hero-scale headlines —
+// punchier, more "native app" than a body-adjacent font at huge sizes.
+const bebasNeue = Bebas_Neue({
+  variable: "--font-bebas",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
@@ -55,7 +64,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${archivo.variable} ${inter.variable} h-full antialiased`}>
+    <html lang="en" className={`${archivo.variable} ${inter.variable} ${bebasNeue.variable} h-full antialiased`}>
       <body className="min-h-full bg-paper text-ink">
         {children}
         <GlobalProviders />

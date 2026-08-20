@@ -4,9 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Menu, X, ShoppingBag, User, ChevronDown } from "lucide-react";
+import { Menu, X, ShoppingBag, User, ChevronDown, MapPin } from "lucide-react";
 import { useCart } from "@/lib/store";
 import { brand } from "@/data/brand";
+import { locations } from "@/data/locations";
+import { useStorePrefs, getMyLocation } from "@/lib/storePrefs";
+import { isOpenNow } from "@/lib/hours";
 
 // Mirrors the nav structure + ordering at thestationkc.com (Aug 2026):
 // Home, Fuel, Food ▾, Liquor, Careers, Station Rewards, Order ▾, Locations ▾, Sweepstakes.
@@ -96,10 +99,16 @@ function NavDropdown({ item, active }: { item: NavItem; active: boolean }) {
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [mobileGroupOpen, setMobileGroupOpen] = useState<string | null>(null);
+  const [storePickerOpen, setStorePickerOpen] = useState(false);
   const pathname = usePathname();
   const lines = useCart((s) => s.lines);
   const toggleCart = useCart((s) => s.toggle);
   const itemCount = lines.reduce((sum, l) => sum + l.qty, 0);
+
+  const myStoreSlug = useStorePrefs((s) => s.myStoreSlug);
+  const setMyStore = useStorePrefs((s) => s.setMyStore);
+  const myStore = getMyLocation(myStoreSlug);
+  const openNow = isOpenNow(myStore.hours);
 
   return (
     <header className="sticky top-0 z-40 border-b border-green-ink/10 bg-paper/90 backdrop-blur-md">
@@ -167,6 +176,52 @@ export default function Header() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
+      </div>
+
+      {/* Sticky mobile store selector — "app home screen" pattern, hidden on
+          desktop where the top nav + Locations dropdown already cover this. */}
+      <div className="relative border-t border-green-ink/10 bg-cream-deep/70 lg:hidden">
+        <button
+          onClick={() => setStorePickerOpen((v) => !v)}
+          className="focus-ring flex w-full items-center justify-between gap-2 px-4 py-2 text-xs font-semibold text-ink-soft"
+          aria-expanded={storePickerOpen}
+        >
+          <span className="flex min-w-0 items-center gap-1.5 truncate">
+            <MapPin className="h-3.5 w-3.5 flex-shrink-0 text-green-deep" />
+            Pick up at: <span className="truncate text-ink">{myStore.city}</span>
+            <ChevronDown className={`h-3.5 w-3.5 flex-shrink-0 transition-transform ${storePickerOpen ? "rotate-180" : ""}`} />
+          </span>
+          <span className="flex flex-shrink-0 items-center gap-1.5 whitespace-nowrap">
+            <span
+              className={`h-2 w-2 rounded-full ${openNow ? "bg-green-bright" : "bg-red-accent"}`}
+              aria-hidden
+            />
+            {openNow ? "Open Now" : "Closed"}
+          </span>
+        </button>
+        {storePickerOpen && (
+          <div className="border-t border-green-ink/10 bg-paper px-2 py-1.5 shadow-soft">
+            {locations.map((loc) => (
+              <button
+                key={loc.slug}
+                onClick={() => {
+                  setMyStore(loc.slug);
+                  setStorePickerOpen(false);
+                }}
+                className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm ${
+                  loc.slug === myStoreSlug
+                    ? "bg-green/10 font-semibold text-green-deep"
+                    : "text-ink-soft hover:bg-cream-deep"
+                }`}
+              >
+                <span>
+                  #{loc.number} {loc.city} <span className="text-xs text-ink-soft/60">— {loc.address}</span>
+                </span>
+                {loc.slug === myStoreSlug && <span className="text-xs font-bold">My store</span>}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {open && (
