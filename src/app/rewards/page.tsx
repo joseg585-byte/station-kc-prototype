@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Star, ExternalLink, Fuel, Coffee, Sparkles, Gauge, Trophy, Gift } from "lucide-react";
+import { Star, ExternalLink, Fuel, Coffee, Pizza, Gauge, Trophy } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import RewardsProgress from "@/components/RewardsProgress";
 import { brand } from "@/data/brand";
 
 export const metadata: Metadata = {
@@ -33,10 +34,10 @@ const TIERS = [
 ];
 
 const REDEEM = [
-  { icon: Coffee, label: "Free coffee or fountain drink", pts: "150 pts" },
-  { icon: Sparkles, label: "Free donut (any variety)", pts: "200 pts" },
-  { icon: Fuel, label: "25¢/gal off one fill-up", pts: "400 pts" },
-  { icon: Gift, label: "$10 gift card", pts: "1,000 pts" },
+  { icon: Coffee, label: "Free coffee", pts: "250 pts" },
+  { icon: Pizza, label: "Free slice", pts: "500 pts" },
+  { icon: Fuel, label: "$0.10/gal off", pts: "1,000 pts" },
+  { icon: Gauge, label: "Free tank fill (under 15 gal)", pts: "2,500 pts" },
 ];
 
 export default function RewardsPage() {
@@ -102,6 +103,10 @@ export default function RewardsPage() {
               </Link>{" "}
               page.
             </p>
+
+            <div className="mt-8">
+              <RewardsProgress />
+            </div>
 
             <div className="mt-10 grid gap-6 sm:grid-cols-3">
               {TIERS.map((tier) => (
