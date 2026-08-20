@@ -6,6 +6,7 @@ import GiftCardPromo from "@/components/GiftCardPromo";
 import Footer from "@/components/Footer";
 import SweepstakesBanner from "@/components/SweepstakesBanner";
 import ProductShowcase from "@/components/ProductShowcase";
+import HumanTouchpoints from "@/components/HumanTouchpoints";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <main>
         <Hero />
         <ProductShowcase />
+        <HumanTouchpoints />
         <FeatureGrid />
         <LocationsPreview />
         <GiftCardPromo />
