@@ -27,7 +27,7 @@ const TIERS = [
   },
   {
     icon: Trophy,
-    name: "VIP",
+    name: "Overdrive",
     range: "1,500+ pts / year",
     perks: ["1.5 pts per $1 spent", "10¢/gal off every fill-up", "Early access to promos & gift-card bonuses"],
   },
