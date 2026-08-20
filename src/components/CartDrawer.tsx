@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { X, Minus, Plus, ShoppingBag } from "lucide-react";
+import { X, Minus, Plus, ArrowRight } from "lucide-react";
 import { useCart, cartTotals } from "@/lib/store";
 import { formatCurrency } from "@/lib/format";
 import { getLocation } from "@/data/locations";
+import EmptyCartIllustration from "@/components/EmptyCartIllustration";
+import PaymentLogos from "@/components/PaymentLogos";
 
 export default function CartDrawer() {
   const isOpen = useCart((s) => s.isOpen);
@@ -50,10 +52,25 @@ export default function CartDrawer() {
 
         <div className="scroll-elegant flex-1 overflow-y-auto px-5 py-4">
           {lines.length === 0 ? (
-            <div className="flex h-full flex-col items-center justify-center text-center text-ink-soft">
-              <ShoppingBag className="mb-3 h-10 w-10 opacity-30" />
-              <p className="font-medium">Your cart is empty</p>
-              <p className="mt-1 text-sm text-ink-soft/70">Add something delicious from the menu.</p>
+            <div className="flex h-full flex-col items-center justify-center text-center">
+              <EmptyCartIllustration />
+              <p className="mt-4 font-display text-lg font-bold text-ink">Nothing brewing yet</p>
+              <p className="mt-1 max-w-[22ch] text-sm text-ink-soft/70">
+                Start your order and we&apos;ll have it fresh and ready for pickup.
+              </p>
+              <Link
+                href="/menu"
+                onClick={close}
+                className="focus-ring mt-5 inline-flex items-center gap-1.5 rounded-full bg-green px-6 py-2.5 text-sm font-bold uppercase tracking-wide text-cream shadow-soft transition-transform hover:scale-[1.02] active:scale-95"
+              >
+                Start your order <ArrowRight className="h-4 w-4" />
+              </Link>
+              <div className="mt-10 w-full border-t border-green-ink/10 pt-5">
+                <p className="mb-3 text-[11px] font-semibold uppercase tracking-wide text-ink-soft/40">
+                  Secure checkout, ready when you are
+                </p>
+                <PaymentLogos />
+              </div>
             </div>
           ) : (
             <ul className="space-y-4">
