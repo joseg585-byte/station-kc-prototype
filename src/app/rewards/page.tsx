@@ -47,7 +47,7 @@ export default function RewardsPage() {
         <section className="relative overflow-hidden bg-green-ink py-20">
           <div className="relative z-10 mx-auto max-w-3xl px-4 text-center sm:px-6">
             <Star className="mx-auto h-10 w-10 text-amber" />
-            <h1 className="mt-4 font-display text-4xl font-black tracking-tight text-cream sm:text-5xl">
+            <h1 className="mt-4 font-display-impact text-5xl tracking-tight text-cream sm:text-6xl">
               Station Rewards
             </h1>
             <p className="mt-3 text-cream/80">

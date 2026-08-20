@@ -18,7 +18,7 @@ export default function MenuPage() {
         <section className="border-b border-green-ink/10 bg-cream py-14">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <p className="overline text-green-deep">Order for pickup</p>
-            <h1 className="mt-3 font-display text-4xl font-black tracking-tight text-ink sm:text-5xl">
+            <h1 className="mt-3 font-display-impact text-5xl tracking-tight text-ink sm:text-6xl">
               The Menu
             </h1>
             <p className="mt-3 max-w-xl text-ink-soft">

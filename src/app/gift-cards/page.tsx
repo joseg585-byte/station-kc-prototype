@@ -86,7 +86,7 @@ export default function GiftCardsPage() {
           />
           <div className="relative z-10 mx-auto max-w-3xl px-4 text-center sm:px-6">
             <Gift className="mx-auto h-10 w-10 text-amber" />
-            <h1 className="mt-4 font-display text-4xl font-black tracking-tight text-cream sm:text-5xl">
+            <h1 className="mt-4 font-display-impact text-5xl tracking-tight text-cream sm:text-6xl">
               Gift Cards
             </h1>
             <p className="mt-3 text-cream/80">

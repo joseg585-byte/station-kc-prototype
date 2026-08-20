@@ -10,7 +10,7 @@ export default function GiftCardPromo() {
         <div className="absolute -bottom-20 -left-16 h-64 w-64 rounded-full bg-amber/20 blur-3xl" />
         <div className="relative z-10 mx-auto max-w-xl">
           <Gift className="mx-auto h-10 w-10 text-amber" />
-          <h2 className="mt-4 font-display text-3xl font-black tracking-tight text-cream sm:text-4xl">
+          <h2 className="mt-4 font-display-impact text-4xl tracking-tight text-cream sm:text-5xl">
             Give the station
           </h2>
           <p className="mt-3 text-cream/80">

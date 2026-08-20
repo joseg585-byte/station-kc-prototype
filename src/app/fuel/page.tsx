@@ -29,7 +29,7 @@ export default function FuelPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-green-ink/90 via-green-ink/40 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
             <p className="overline text-amber">Every location, all day</p>
-            <h1 className="mt-3 flex items-center gap-3 font-display text-4xl font-black tracking-tight text-cream sm:text-5xl">
+            <h1 className="mt-3 flex items-center gap-3 font-display-impact text-5xl tracking-tight text-cream sm:text-6xl">
               <Fuel className="h-9 w-9" /> 24-Hour Fuel
             </h1>
           </div>

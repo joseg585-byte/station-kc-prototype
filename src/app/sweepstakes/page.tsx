@@ -36,7 +36,7 @@ export default function SweepstakesPage() {
           <div className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6">
             <Trophy className="mx-auto h-11 w-11 text-amber" />
             <p className="overline mt-4 text-amber">Now open</p>
-            <h1 className="mt-3 font-display text-4xl font-black tracking-tight text-cream sm:text-5xl">
+            <h1 className="mt-3 font-display-impact text-5xl tracking-tight text-cream sm:text-6xl">
               Win Free Pringles for an Entire Year
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-cream/80">
