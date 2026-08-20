@@ -29,6 +29,14 @@
   --shadow-soft: 0 8px 30px rgba(16, 20, 15, 0.12);
   --shadow-lift: 0 4px 10px rgba(16, 20, 15, 0.1),
     0 30px 60px -20px rgba(3, 53, 24, 0.35);
+
+  /* CLS hardening: the fixed bottom tab bar's reserved height (mobile only,
+     see the body padding-bottom rule below) and the mobile store-selector
+     row's height, kept explicit rather than left to implicit
+     padding-plus-text-size so it can never vary and shift content on
+     hydration. */
+  --tabbar-h: 4rem;
+  --store-row-h: 2.375rem;
 }
 
 @theme inline {
@@ -113,23 +121,48 @@ body {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* Headline face for hero-scale type — heavy, condensed, all-caps energy. */
+/* Headline face for hero-scale type — heavy, condensed, all-caps energy.
+   Bebas Neue mechanics: tight vertical rhythm (leading-none-ish), letters
+   given room to breathe (tracking-wide-ish), and balanced line-wrapping so
+   headlines never orphan a single word. Set centrally here (rather than as
+   Tailwind utilities on every usage) so it applies uniformly everywhere the
+   class is used — this rule is later in the cascade than Tailwind's
+   generated utilities, so it wins over any lingering `tracking-tight`. */
 .font-display-impact {
   font-family: var(--font-bebas), var(--font-archivo), sans-serif;
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
 }
 
 /* Room for the fixed bottom tab bar on mobile so footer content isn't hidden
    behind it. Tab bar is hidden at the lg breakpoint, so clear the padding
-   there too. */
+   there too. (The top header is `position: sticky`, not `fixed` — it stays
+   in normal document flow, so <main> never needs matching top padding; a
+   sticky element's own box already reserves its space.) */
 @media (max-width: 1023px) {
   body {
-    padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px));
   }
 }
 
 .focus-ring:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--amber) 55%, transparent);
+}
+
+/* Belt-and-suspenders a11y: every native interactive element gets a visible
+   focus ring on keyboard focus, even where the `.focus-ring` class wasn't
+   explicitly added. Mirrors the same amber ring as `.focus-ring` above. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--amber) 55%, transparent);
+  border-radius: 0.375rem;
 }
 
 .scroll-elegant::-webkit-scrollbar {
@@ -192,13 +225,45 @@ body {
   animation: float-up 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
+/* Skeleton shimmer blocks for loading states — same shimmer motion as
+   .blur-load, sized/laid out per-screen to mirror the real content's
+   geometry (see components/skeletons/*). */
+.skeleton {
+  border-radius: 0.75rem;
+  background-image: linear-gradient(
+    100deg,
+    var(--cream-deep) 30%,
+    color-mix(in srgb, var(--amber) 22%, var(--cream-deep)) 50%,
+    var(--cream-deep) 70%
+  );
+  background-size: 960px 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+@keyframes badge-pop {
+  0% {
+    transform: scale(0);
+  }
+  60% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.badge-pop {
+  animation: badge-pop 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   .blur-load,
   .pulse-ring,
-  .float-up {
+  .float-up,
+  .skeleton,
+  .badge-pop {
     animation: none;
   }
 }
