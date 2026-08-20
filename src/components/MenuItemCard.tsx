@@ -19,6 +19,7 @@ export default function MenuItemCard({
 
   const handleAdd = () => {
     addItem(item.id, locationSlug);
+    navigator.vibrate?.(50);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1200);
   };
