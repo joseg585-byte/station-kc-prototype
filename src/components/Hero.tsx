@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
+import TrustSignals from "@/components/TrustSignals";
 
 export default function Hero() {
   return (
@@ -22,7 +23,7 @@ export default function Hero() {
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-32 sm:px-6 lg:px-8">
         <p className="float-up overline text-amber">Welcome to the station</p>
         <h1
-          className="float-up mt-4 max-w-3xl font-display text-5xl font-black leading-[0.98] tracking-tight text-cream sm:text-6xl md:text-7xl"
+          className="float-up font-display-impact mt-4 max-w-3xl text-6xl leading-[0.92] tracking-tight text-cream sm:text-7xl md:text-8xl"
           style={{ animationDelay: "80ms" }}
         >
           Your Favorite<br />One Stop Shop
@@ -53,6 +54,10 @@ export default function Hero() {
             <MapPin className="h-4 w-4" />
             Find a Location
           </Link>
+        </div>
+
+        <div className="mt-10">
+          <TrustSignals />
         </div>
       </div>
 
